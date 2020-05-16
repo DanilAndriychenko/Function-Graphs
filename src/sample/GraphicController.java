@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.chart.LineChart;
@@ -17,15 +16,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import org.gillius.jfxutils.chart.*;
-import org.w3c.dom.ls.LSOutput;
+import org.gillius.jfxutils.chart.ChartPanManager;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class GraphicController {
 
+    HashMap<GraphicLine, XYChart.Series> functions = new HashMap<>();
     @FXML
     private ScrollPane scrollPaneProperties;
     @FXML
@@ -38,7 +36,6 @@ public class GraphicController {
     private MenuItem menuItemCartesian;
     @FXML
     private MenuItem menuItemPolar;
-
     @FXML
     private LineChart lineChart;
     @FXML
@@ -47,9 +44,9 @@ public class GraphicController {
     private NumberAxis axisY;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         /*Set actions for buttons: plus and both systems*/
-        buttonPlus.setOnAction(actionEvent -> contextMenuPlus.show(buttonPlus, Side.BOTTOM, 0,0));
+        buttonPlus.setOnAction(actionEvent -> contextMenuPlus.show(buttonPlus, Side.BOTTOM, 0, 0));
         menuItemCartesian.setOnAction(actionEvent -> addFunction(GraphicLine.CARTESIAN));
         menuItemPolar.setOnAction(actionEvent -> addFunction(GraphicLine.POLAR));
         //TODO: remove functions from vBox
@@ -79,11 +76,10 @@ public class GraphicController {
         });
     }
 
-    HashMap<GraphicLine, XYChart.Series> functions = new HashMap<>();
     /*
     This method takes type of function that have to be created and add container to vBox on scrollPane
      */
-    private void addFunction(String type){
+    private void addFunction(String type) {
         GraphicLine graphicLine = new GraphicLine(type);
 
         XYChart.Series series = new XYChart.Series<>();
@@ -95,17 +91,17 @@ public class GraphicController {
         vBoxProperties.getChildren().add(graphicLine);
     }
 
-    private void keyTyped(KeyEvent keyEvent){
-        GraphicLine graphicLine = (GraphicLine) ((JFXTextField)(keyEvent.getSource())).getParent();
+    private void keyTyped(KeyEvent keyEvent) {
+        GraphicLine graphicLine = (GraphicLine) ((JFXTextField) (keyEvent.getSource())).getParent();
         String expression = graphicLine.getTextField().getText();
         ObservableList<XYChart.Data> dataList = getData(expression);
         functions.get(graphicLine).setName(expression);
         functions.get(graphicLine).setData(dataList);
     }
 
-    private ObservableList<XYChart.Data> getData(String expression){
+    private ObservableList<XYChart.Data> getData(String expression) {
         ObservableList<XYChart.Data> dataList = FXCollections.observableArrayList();
-        for (double i=-200; i<=200; i+=0.5) {
+        for (double i = -200; i <= 200; i += 0.5) {
             //TODO: handle exception
             //TODO: add minus tp GraphicLine and textarea below to tell about error;
             double y = new ExpressionBuilder(expression)
@@ -117,5 +113,4 @@ public class GraphicController {
         }
         return dataList;
     }
-
 }

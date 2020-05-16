@@ -9,5 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jfoenix-9.0.8" level="project" />
     <orderEntry type="library" name="ikonli-core-2.3.0" level="project" />
+    <orderEntry type="library" name="exp4j-0.4.8" level="project" />
+    <orderEntry type="library" name="jfxutils-1.0" level="project" />
   </component>
 </module>
